@@ -1,18 +1,5 @@
-const cell = (size) => {
-	const arr = [];
-
-	for (let i = 0; i < size * size; i++) {
-		const y = Math.floor(i / size);
-		const x = i - size * y;
-		arr.push({ x: x, y: y });
-	}
-	return arr;
-};
-
-export const FieldLayout = () => {
-	const size = 3;
-	const arr = cell(size);
-
+/* eslint-disable react/prop-types */
+export const FieldLayout = ({ size, coordinates }) => {
 	return (
 		<>
 			<ul
@@ -23,7 +10,7 @@ export const FieldLayout = () => {
 				}}
 				className="place-items-center gap-1 mt-10 bg-radial from-gray-200 to-gray-200/0"
 			>
-				{arr.map((el) => (
+				{coordinates.map((el) => (
 					<li
 						className="grid relative w-30 h-30 bg-[#3a3939]"
 						key={Math.random().toString(16).slice(2)}
@@ -38,8 +25,3 @@ export const FieldLayout = () => {
 		</>
 	);
 };
-
-// FieldLayout.propTypes = {
-// 	rows: String.isRequired,
-// 	cols: String.isRequired,
-// };
