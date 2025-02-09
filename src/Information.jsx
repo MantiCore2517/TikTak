@@ -3,18 +3,22 @@ import { InformationLayout } from "./layout/InformationLayout";
 import { Cross } from "./Cross";
 import { Zero } from "./Zero";
 
-export const Information = ({ gameStatus, setGameStatus, turn }) => {
+export const Information = ({ gameState, setGameState, turn }) => {
 	const onPlay = () => {
-		setGameStatus("game");
+		setGameState("gameStarting");
+	};
+	const onRefresh = () => {
+		setGameState("gameStarting");
 	};
 
 	return (
 		<InformationLayout
-			gameStatus={gameStatus}
+			gameState={gameState}
 			cross={<Cross />}
 			zero={<Zero />}
 			turn={turn}
 			onPlay={onPlay}
+			onRefresh={onRefresh}
 		/>
 	);
 };

@@ -4,18 +4,21 @@ import { Information } from "./Information";
 import { useState } from "react";
 
 export const App = () => {
-	const [gameStatus, setGameStatus] = useState("start");
+	const [gameState, setGameState] = useState("start");
 	const [turn, setTurn] = useState("player_1");
 
 	const props = {
 		information: (
-			<Information
-				gameStatus={gameStatus}
-				setGameStatus={setGameStatus}
+			<Information gameState={gameState} setGameState={setGameState} turn={turn} />
+		),
+		field: (
+			<Field
 				turn={turn}
+				setTurn={setTurn}
+				gameState={gameState}
+				setGameState={setGameState}
 			/>
 		),
-		field: <Field turn={turn} setTurn={setTurn} />,
 	};
 	return <AppLayout {...props} />;
 };
