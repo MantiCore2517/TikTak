@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-export const FieldLayout = ({ size, coordinates }) => {
+export const FieldLayout = ({ size, currentFieldState, makeMove, cross, zero }) => {
 	return (
 		<>
 			<ul
@@ -8,17 +8,19 @@ export const FieldLayout = ({ size, coordinates }) => {
 					gridTemplateRows: `repeat(${size}, minmax(0, 1fr))`,
 					gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
 				}}
-				className="place-items-center gap-1 mt-10 bg-radial from-gray-200 to-gray-200/0"
+				className="place-items-center gap-2 mt-5 bg-radial from-gray-200 to-gray-200/0"
 			>
-				{coordinates.map((el) => (
+				{currentFieldState.map((el) => (
 					<li
 						className="grid relative w-30 h-30 bg-[#3a3939]"
 						key={Math.random().toString(16).slice(2)}
+						onClick={makeMove}
 						data-posx={el.x}
 						data-posy={el.y}
+						data-state={el.fillWith}
 					>
-						<div className="absolute w-30 h-1.5 rotate-45 bg-gray-300 place-self-center rounded-full"></div>
-						<div className="absolute w-30 h-1.5 rotate-135 bg-gray-300 place-self-center rounded-full"></div>
+						{el.fillWith === "cross" && cross}
+						{el.fillWith === "zero" && zero}
 					</li>
 				))}
 			</ul>
