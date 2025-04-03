@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
-export const FieldLayout = ({ size, currentFieldState, makeMove, cross, zero }) => {
+import { Cross } from "../Cross";
+import { Zero } from "../Zero";
+
+export const FieldLayout = ({ hidden, size, currentFieldState, makeMove }) => {
 	return (
 		<>
 			<ul
+				hidden={hidden}
 				style={{
 					display: "grid",
 					gridTemplateRows: `repeat(${size}, minmax(0, 1fr))`,
@@ -19,8 +23,8 @@ export const FieldLayout = ({ size, currentFieldState, makeMove, cross, zero }) 
 						data-posy={el.y}
 						data-state={el.fillWith}
 					>
-						{el.fillWith === "cross" && cross}
-						{el.fillWith === "zero" && zero}
+						{el.fillWith === "cross" && <Cross />}
+						{el.fillWith === "zero" && <Zero />}
 					</li>
 				))}
 			</ul>

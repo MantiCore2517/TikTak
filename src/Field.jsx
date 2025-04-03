@@ -1,75 +1,79 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { FieldLayout } from "./layout/FieldLayout";
-import { Cross } from "./Cross";
-import { Zero } from "./Zero";
 import {
 	fieldState,
 	updateFieldState,
 	checkEndGameCondition,
 } from "./fieldStateController";
+import { store } from "./store";
+import { fieldSize } from "../config.json";
 
-export const Field = ({ turn, setTurn, gameState, setGameState }) => {
-	const size = 3;
-	const [field, setField] = useState([]);
+export const Field = () => {
+	const gameState = store.getState().gameState;
+	const turn = store.getState().turn;
+	const field = store.getState().fieldState;
 
 	useEffect(() => {
-		checkEndGameCondition(field, size, setGameState);
-	}, [field, setGameState]);
+		checkEndGameCondition(field, fieldSize);
+	}, [field]);
 
 	useEffect(() => {
 		if (gameState === "gameStarting") {
-			fieldState(size, setField).game;
+			fieldState(fieldSize).game;
 		}
 	}, [gameState]);
 
 	const makeMove = (event) => {
 		const { target } = event;
 		if (gameState === "game" || gameState === "gameStarting") {
-			setGameState("game");
+			store.dispatch({ type: "SET_GAME_STATE", payload: "game" });
 			if (
 				turn === "player_1" &&
 				!target.dataset.state &&
 				!target.parentNode.dataset.state
 			) {
-				setField((prev) =>
-					updateFieldState(
-						prev,
+				store.dispatch({
+					type: "SET_FIELD_STATE",
+					payload: updateFieldState(
+						field,
 						target.dataset.posx,
 						target.dataset.posy,
 						"cross",
 					),
-				);
+				});
 
-				setTurn("player_2");
+				store.dispatch({ type: "SET_TURN", payload: "player_2" });
 			} else if (
 				turn === "player_2" &&
 				!target.dataset.state &&
 				!target.parentNode.dataset.state
 			) {
-				setField((prev) =>
-					updateFieldState(
-						prev,
+				store.dispatch({
+					type: "SET_FIELD_STATE",
+					payload: updateFieldState(
+						field,
 						target.dataset.posx,
 						target.dataset.posy,
 						"zero",
 					),
-				);
+				});
 
-				setTurn("player_1");
+				store.dispatch({ type: "SET_TURN", payload: "player_1" });
 			}
 		}
 	};
 
+	const props = {
+		hidden: gameState === "start",
+		size: fieldSize,
+		currentFieldState: field,
+		makeMove: makeMove,
+	};
+
 	return (
 		<>
-			<FieldLayout
-				size={size}
-				currentFieldState={field}
-				makeMove={makeMove}
-				cross={<Cross />}
-				zero={<Zero />}
-			/>
+			<FieldLayout {...props} />
 		</>
 	);
 };

@@ -1,4 +1,8 @@
-export const initialState = {};
+export const initialState = {
+	gameState: "start",
+	turn: "player_1",
+	fieldState: [],
+};
 
 export const reducer = (state = initialState, action) => {
 	const { type, payload } = action;
@@ -14,10 +18,10 @@ export const reducer = (state = initialState, action) => {
 				...state,
 				turn: payload,
 			};
-		case "SET_FIELD":
+		case "SET_FIELD_STATE":
 			return {
 				...state,
-				field: payload,
+				fieldState: payload,
 			};
 		default:
 			return state;

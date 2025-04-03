@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
-export const AppLayout = (props) => {
-	const { information, field } = props;
+import { Information } from "../Information";
+import { Field } from "../Field";
+
+export const AppLayout = () => {
 	return (
 		<>
-			{information}
-			{field}
+			<Information />
+			<Field />
 		</>
 	);
 };

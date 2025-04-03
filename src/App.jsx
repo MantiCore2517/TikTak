@@ -1,24 +1,14 @@
 import { AppLayout } from "./layout/AppLayout";
-import { Field } from "./Field";
-import { Information } from "./Information";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { store } from "./store";
 
 export const App = () => {
-	const [gameState, setGameState] = useState("start");
-	const [turn, setTurn] = useState("player_1");
+	const [, setState] = useState({});
 
-	const props = {
-		information: (
-			<Information gameState={gameState} setGameState={setGameState} turn={turn} />
-		),
-		field: (
-			<Field
-				turn={turn}
-				setTurn={setTurn}
-				gameState={gameState}
-				setGameState={setGameState}
-			/>
-		),
-	};
-	return <AppLayout {...props} />;
+	useEffect(() => {
+		const unsubscribe = store.subscribe(() => setState(store.getState()));
+		return () => unsubscribe();
+	}, []);
+
+	return <AppLayout />;
 };

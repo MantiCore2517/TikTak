@@ -1,21 +1,21 @@
 /* eslint-disable react/prop-types */
 import { InformationLayout } from "./layout/InformationLayout";
-import { Cross } from "./Cross";
-import { Zero } from "./Zero";
+import { store } from "./store";
 
-export const Information = ({ gameState, setGameState, turn }) => {
+export const Information = () => {
 	const onPlay = () => {
-		setGameState("gameStarting");
+		store.dispatch({ type: "SET_GAME_STATE", payload: "gameStarting" });
 	};
 	const onRefresh = () => {
-		setGameState("gameStarting");
+		store.dispatch({ type: "SET_GAME_STATE", payload: "gameStarting" });
 	};
+
+	const gameState = store.getState().gameState;
+	const turn = store.getState().turn;
 
 	return (
 		<InformationLayout
 			gameState={gameState}
-			cross={<Cross />}
-			zero={<Zero />}
 			turn={turn}
 			onPlay={onPlay}
 			onRefresh={onRefresh}

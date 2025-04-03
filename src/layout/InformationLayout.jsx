@@ -1,12 +1,8 @@
 /* eslint-disable react/prop-types */
-export const InformationLayout = ({
-	gameState,
-	cross,
-	zero,
-	turn,
-	onPlay,
-	onRefresh,
-}) => {
+import { Cross } from "../Cross";
+import { Zero } from "../Zero";
+
+export const InformationLayout = ({ gameState, turn, onPlay, onRefresh }) => {
 	return (
 		<>
 			{gameState === "start" && (
@@ -24,8 +20,8 @@ export const InformationLayout = ({
 			{(gameState === "gameStarting" || gameState === "game") && (
 				<div className="grid grid-cols-3 w-auto h-30 m-auto">
 					<div className="grid col-start-2 w-30 h-30 place-self-center animate-bounce">
-						{turn === "player_1" && cross}
-						{turn === "player_2" && zero}
+						{turn === "player_1" && <Cross />}
+						{turn === "player_2" && <Zero />}
 					</div>
 					{gameState === "game" && (
 						<button
@@ -40,7 +36,7 @@ export const InformationLayout = ({
 			)}
 			{gameState === "end_player_1_win" && (
 				<div className="grid grid-cols-3 w-auto h-30 m-auto ">
-					{cross}
+					{<Cross />}
 					<div
 						className="absolute col-start-2 w-30 h-10  bg-orange-300 text-orange-800 place-self-center
 			rounded-full text-center place-content-center text-xl font-bold inset-ring-2
@@ -66,7 +62,7 @@ export const InformationLayout = ({
 			)}
 			{gameState === "end_player_2_win" && (
 				<div className="grid grid-cols-3 w-auto h-30 m-auto ">
-					{zero}
+					{<Zero />}
 					<div
 						className="absolute w-30 h-10  bg-orange-300 text-orange-800 place-self-center
 			rounded-full text-center place-content-center text-xl font-bold inset-ring-2
@@ -92,8 +88,8 @@ export const InformationLayout = ({
 			)}
 			{gameState === "draw" && (
 				<div className="grid grid-cols-3 w-auto h-30 m-auto ">
-					{zero}
-					{cross}
+					{<Zero />}
+					{<Cross />}
 
 					<div
 						className="absolute w-30 h-10  bg-orange-300 text-orange-800 place-self-center
