@@ -1,23 +1,4 @@
-import { store } from "./store";
-
-export const updateFieldState = (field, x, y, fillWith) => {
-	const newFieldState = field.map((cell) =>
-		cell.x === x && cell.y === y && cell.fillWith === null
-			? {
-					x: cell.x,
-					y: cell.y,
-					fillWith: fillWith,
-				}
-			: {
-					x: cell.x,
-					y: cell.y,
-					fillWith: cell.fillWith,
-				},
-	);
-
-	return newFieldState;
-};
-
+import { gameEndFirstWin, gameEndDraw, gameEndSecondWin } from "./actions";
 
 const getConditionsArr = (size) => {
 	const trueSize = size - 1;
@@ -33,7 +14,7 @@ const getConditionsArr = (size) => {
 	return arr
 };
 
-export const checkEndGameCondition = (field, size) =>{
+export const checkEndGameCondition = (field, size, dispatch) =>{
 	const currentState = field
 	const conditions = getConditionsArr(size)
 	const winState = new Array((size*2) + 2).fill(0)
@@ -67,24 +48,10 @@ export const checkEndGameCondition = (field, size) =>{
 
 	const isFirstPlayerWin = firstWinState.some((num) => num === size);
 	const isSecondPlayerWin = secondWinState.some((num) => num === size);
-	isFirstPlayerWin && store.dispatch({ type: "SET_GAME_STATE", payload: "end_player_1_win" });
-	isSecondPlayerWin && store.dispatch({ type: "SET_GAME_STATE", payload: "end_player_2_win" });
+	isFirstPlayerWin && dispatch(gameEndFirstWin);
+	isSecondPlayerWin && dispatch(gameEndSecondWin);
 
-	isFullFilled && !isFirstPlayerWin && !isSecondPlayerWin && store.dispatch({ type: "SET_GAME_STATE", payload: "draw" });
+	isFullFilled && !isFirstPlayerWin && !isSecondPlayerWin && dispatch(gameEndDraw);
 
 }
 
-const getFieldBaseState = (size, fillWith = null) => {
-	const arr = [];
-
-	for (let i = 0; i < size * size; i++) {
-		const y = Math.floor(i / size);
-		const x = i - size * y;
-		arr.push({ x: String(x), y: String(y), fillWith: fillWith });
-	}
-	return arr;
-};
-
-export const fieldState = (size) => {
-	return { start: [], game: store.dispatch({type: "SET_FIELD_STATE", payload: getFieldBaseState(size)})};
-};

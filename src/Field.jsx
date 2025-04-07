@@ -1,65 +1,50 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
 import { FieldLayout } from "./layout/FieldLayout";
-import {
-	fieldState,
-	updateFieldState,
-	checkEndGameCondition,
-} from "./fieldStateController";
-import { store } from "./store";
+import { checkEndGameCondition } from "./fieldStateController";
 import { fieldSize } from "../config.json";
+import { useSelector, useDispatch } from "react-redux";
+import { selectGameState, selectTurnState, selectFieldState } from "./selectors";
+import {
+	fieldGameStarting,
+	gameGame,
+	turnFirstPlayer,
+	turnSecondPlayer,
+	fieldUpdateState,
+} from "./actions";
 
 export const Field = () => {
-	const gameState = store.getState().gameState;
-	const turn = store.getState().turn;
-	const field = store.getState().fieldState;
+	const dispatch = useDispatch();
+	const gameState = useSelector(selectGameState);
+	const turn = useSelector(selectTurnState);
+	const field = useSelector(selectFieldState);
 
 	useEffect(() => {
-		checkEndGameCondition(field, fieldSize);
+		checkEndGameCondition(field, fieldSize, dispatch);
 	}, [field]);
 
 	useEffect(() => {
-		if (gameState === "gameStarting") {
-			fieldState(fieldSize).game;
-		}
+		gameState === "gameStarting" && dispatch(fieldGameStarting(fieldSize));
 	}, [gameState]);
 
 	const makeMove = (event) => {
 		const { target } = event;
 		if (gameState === "game" || gameState === "gameStarting") {
-			store.dispatch({ type: "SET_GAME_STATE", payload: "game" });
+			dispatch(gameGame);
 			if (
 				turn === "player_1" &&
 				!target.dataset.state &&
 				!target.parentNode.dataset.state
 			) {
-				store.dispatch({
-					type: "SET_FIELD_STATE",
-					payload: updateFieldState(
-						field,
-						target.dataset.posx,
-						target.dataset.posy,
-						"cross",
-					),
-				});
-
-				store.dispatch({ type: "SET_TURN", payload: "player_2" });
+				dispatch(fieldUpdateState(field, target, "cross"));
+				dispatch(turnSecondPlayer);
 			} else if (
 				turn === "player_2" &&
 				!target.dataset.state &&
 				!target.parentNode.dataset.state
 			) {
-				store.dispatch({
-					type: "SET_FIELD_STATE",
-					payload: updateFieldState(
-						field,
-						target.dataset.posx,
-						target.dataset.posy,
-						"zero",
-					),
-				});
-
-				store.dispatch({ type: "SET_TURN", payload: "player_1" });
+				dispatch(fieldUpdateState(field, target, "zero"));
+				dispatch(turnFirstPlayer);
 			}
 		}
 	};
