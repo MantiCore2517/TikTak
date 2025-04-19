@@ -1,5 +1,8 @@
+import React from "react";
 import { AppLayout } from "./layout/AppLayout";
 
-export const App = () => {
-	return <AppLayout />;
-};
+export class App extends React.Component {
+	render() {
+		return <AppLayout />;
+	}
+}
